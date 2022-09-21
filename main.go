@@ -10,6 +10,7 @@ import (
 	"github.com/ramadoiranedar/go_restapi/controller"
 	"github.com/ramadoiranedar/go_restapi/exception"
 	"github.com/ramadoiranedar/go_restapi/helper"
+	"github.com/ramadoiranedar/go_restapi/middleware"
 	"github.com/ramadoiranedar/go_restapi/repository"
 	"github.com/ramadoiranedar/go_restapi/service"
 )
@@ -34,8 +35,9 @@ func main() {
 
 	server := http.Server{
 		Addr:    "localhost:3000",
-		Handler: router,
+		Handler: middleware.NewAuthMiddleware(router),
 	}
+
 	err := server.ListenAndServe()
 	helper.PanicIfError(err)
 }

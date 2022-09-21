@@ -18,11 +18,7 @@ type CategoryServiceImpl struct {
 	Validate           *validator.Validate
 }
 
-func NewCategoryService(
-	categoryRepository repository.CategoryRepository,
-	DB *sql.DB,
-	validate *validator.Validate,
-) CategoryService {
+func NewCategoryService(categoryRepository repository.CategoryRepository, DB *sql.DB, validate *validator.Validate) CategoryService {
 	return &CategoryServiceImpl{
 		CategoryRepository: categoryRepository,
 		DB:                 DB,
@@ -36,6 +32,7 @@ func (service *CategoryServiceImpl) Create(ctx context.Context, request web.Cate
 
 	tx, err := service.DB.Begin()
 	helper.PanicIfError(err)
+
 	defer helper.CommitOrRollback(tx)
 
 	category := domain.Category{
@@ -59,7 +56,6 @@ func (service *CategoryServiceImpl) Update(ctx context.Context, request web.Cate
 	if err != nil {
 		panic(exception.NewNotFoundError(err.Error()))
 	}
-
 	category.Name = request.Name
 
 	category = service.CategoryRepository.Update(ctx, tx, category)
@@ -67,12 +63,12 @@ func (service *CategoryServiceImpl) Update(ctx context.Context, request web.Cate
 	return helper.ToCategoryResponse(category)
 }
 
-func (service *CategoryServiceImpl) Delete(ctx context.Context, categoryid int) {
+func (service *CategoryServiceImpl) Delete(ctx context.Context, categoryId int) {
 	tx, err := service.DB.Begin()
 	helper.PanicIfError(err)
 	defer helper.CommitOrRollback(tx)
 
-	category, err := service.CategoryRepository.FindById(ctx, tx, categoryid)
+	category, err := service.CategoryRepository.FindById(ctx, tx, categoryId)
 	if err != nil {
 		panic(exception.NewNotFoundError(err.Error()))
 	}
@@ -91,7 +87,6 @@ func (service *CategoryServiceImpl) FindById(ctx context.Context, categoryId int
 	}
 
 	return helper.ToCategoryResponse(category)
-
 }
 
 func (service *CategoryServiceImpl) FindAll(ctx context.Context) []web.CategoryResponse {

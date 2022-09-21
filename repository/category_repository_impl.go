@@ -26,6 +26,7 @@ func (repository *CategoryRepositoryImpl) Create(ctx context.Context, tx *sql.Tx
 		panic(err)
 	}
 	category.Id = int(id)
+
 	return category
 }
 
