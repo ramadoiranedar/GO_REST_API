@@ -8,6 +8,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"github.com/ramadoiranedar/go_restapi/app"
 	"github.com/ramadoiranedar/go_restapi/controller"
+	"github.com/ramadoiranedar/go_restapi/exception"
 	"github.com/ramadoiranedar/go_restapi/helper"
 	"github.com/ramadoiranedar/go_restapi/repository"
 	"github.com/ramadoiranedar/go_restapi/service"
@@ -28,6 +29,8 @@ func main() {
 	router.POST("/api/categories", categoryController.Create)
 	router.PUT("/api/categories/:categoryId", categoryController.Update)
 	router.DELETE("/api/categories/:categoryId", categoryController.Delete)
+
+	router.PanicHandler = exception.ErrorHandler
 
 	server := http.Server{
 		Addr:    "localhost:3000",
