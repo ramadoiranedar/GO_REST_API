@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/go-playground/validator"
 	"github.com/ramadoiranedar/go_restapi/exception"
@@ -13,12 +14,14 @@ import (
 
 type CategoryServiceImpl struct {
 	CategoryRepository repository.CategoryRepository
+	DB                 *sql.DB
 	Validate           *validator.Validate
 }
 
-func NewCategoryService(categoryRepository repository.CategoryRepository, validate *validator.Validate) CategoryService {
+func NewCategoryService(categoryRepository repository.CategoryRepository, DB *sql.DB, validate *validator.Validate) CategoryService {
 	return &CategoryServiceImpl{
 		CategoryRepository: categoryRepository,
+		DB:                 DB,
 		Validate:           validate,
 	}
 }
